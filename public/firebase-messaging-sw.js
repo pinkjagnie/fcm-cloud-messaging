@@ -1,7 +1,9 @@
 // Scripts for firebase and firebase messaging
-importScripts("https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js");
-importScripts(
-  "https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"
+self.importScripts(
+  "https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"
+);
+self.importScripts(
+  "https://www.gstatic.com/firebasejs/9.6.1/firebase-messaging-compat.js"
 );
 
 // Initialize the Firebase app in the service worker
