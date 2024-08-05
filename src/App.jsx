@@ -35,13 +35,22 @@ function App() {
 
   useEffect(() => {
     requestPermission();
+
+    const unsubscribe = onMessage(messaging, (payload) => {
+      console.log("incoming message");
+      console.log(payload);
+      toast(<Message notification={payload.notification} />);
+    });
+
+    // Clean up the subscription on unmount
+    return () => unsubscribe();
   }, []);
 
-  onMessage(messaging, (payload) => {
-    console.log("incoming message");
-    console.log(payload);
-    toast(<Message notification={payload.notification} />);
-  });
+  // onMessage(messaging, (payload) => {
+  //   console.log("incoming message");
+  //   console.log(payload);
+  //   toast(<Message notification={payload.notification} />);
+  // });
 
   return (
     <>
