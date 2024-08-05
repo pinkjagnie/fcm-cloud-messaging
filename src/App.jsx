@@ -3,7 +3,7 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 
-import { getToken } from "firebase/messaging";
+import { getToken, onMessage } from "firebase/messaging";
 import { messaging } from "./firebase/firebaseConfig";
 
 const { VITE_APP_VAPID_KEY } = import.meta.env;
@@ -31,6 +31,11 @@ function App() {
   useEffect(() => {
     requestPermission();
   }, []);
+
+  onMessage(messaging, (payload) => {
+    console.log("incoming message");
+    console.log(payload);
+  });
 
   return (
     <>
