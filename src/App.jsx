@@ -6,6 +6,11 @@ import "./App.css";
 import { getToken, onMessage } from "firebase/messaging";
 import { messaging } from "./firebase/firebaseConfig";
 
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import Message from "./components/Message";
+
 const { VITE_APP_VAPID_KEY } = import.meta.env;
 
 function App() {
@@ -35,6 +40,7 @@ function App() {
   onMessage(messaging, (payload) => {
     console.log("incoming message");
     console.log(payload);
+    toast(<Message notification={payload.notification} />);
   });
 
   return (
@@ -59,6 +65,7 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <ToastContainer />
     </>
   );
 }
