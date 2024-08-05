@@ -22,6 +22,7 @@ const messaging = firebase.messaging();
 
 //Listens for background notifications
 messaging.onBackgroundMessage((payload) => {
+  console.log(defaultConfig);
   console.log("Received background message");
   console.log(payload);
 

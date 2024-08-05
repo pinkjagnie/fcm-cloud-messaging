@@ -3,8 +3,8 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 
-import { getToken, onMessage } from "firebase/messaging";
-import { messaging } from "./firebase/firebaseConfig";
+import { onMessage } from "firebase/messaging";
+import { messaging, requestForToken } from "./firebase/firebaseConfig";
 
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -14,19 +14,18 @@ import Message from "./components/Message";
 function App() {
   const [count, setCount] = useState(0);
 
-  const { VITE_APP_VAPID_KEY } = import.meta.env;
-
   async function requestPermission() {
     //requesting permission using Notification API
     const permission = await Notification.requestPermission();
 
     if (permission === "granted") {
-      const token = await getToken(messaging, {
-        vapidKey: VITE_APP_VAPID_KEY,
-      });
+      requestForToken();
+      // const token = await getToken(messaging, {
+      //   vapidKey: VITE_APP_VAPID_KEY,
+      // });
 
-      //consoling the token
-      console.log("Token generated : ", token);
+      // //consoling the token
+      // console.log("Token generated : ", token);
     } else if (permission === "denied") {
       //notifications are blocked
       alert("You denied for the notification");
@@ -39,7 +38,11 @@ function App() {
     const unsubscribe = onMessage(messaging, (payload) => {
       console.log("incoming message");
       console.log(payload);
-      toast(<Message notification={payload.notification} />);
+      toast(<Message notification={payload.notification} />, {
+        autoClose: false,
+        closeOnClick: false,
+        closeButton: true,
+      });
     });
 
     // Clean up the subscription on unmount
