@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
@@ -12,20 +12,12 @@ import "react-toastify/dist/ReactToastify.css";
 import Message from "./components/Message";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   async function requestPermission() {
     //requesting permission using Notification API
     const permission = await Notification.requestPermission();
 
     if (permission === "granted") {
       requestForToken();
-      // const token = await getToken(messaging, {
-      //   vapidKey: VITE_APP_VAPID_KEY,
-      // });
-
-      // //consoling the token
-      // console.log("Token generated : ", token);
     } else if (permission === "denied") {
       //notifications are blocked
       alert("You denied for the notification");
@@ -49,12 +41,6 @@ function App() {
     return () => unsubscribe();
   }, []);
 
-  // onMessage(messaging, (payload) => {
-  //   console.log("incoming message");
-  //   console.log(payload);
-  //   toast(<Message notification={payload.notification} />);
-  // });
-
   return (
     <>
       <div>
@@ -66,17 +52,6 @@ function App() {
         </a>
       </div>
       <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
       <ToastContainer />
     </>
   );
