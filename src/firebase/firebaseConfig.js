@@ -10,9 +10,8 @@ const firebaseConfig = {
   messagingSenderId: import.meta.env.VITE_APP_MESSAGING_SENDER_ID,
   appId: import.meta.env.VITE_APP_APP_ID,
   measurementId: import.meta.env.VITE_APP_MEASUREMENT_ID,
+  vapidKey: import.meta.env.VITE_APP_VAPID_KEY,
 };
-
-// export const FIREBASE_VAPID_KEY = import.meta.env.VITE_VAPID_KEY;
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

@@ -11,10 +11,10 @@ import "react-toastify/dist/ReactToastify.css";
 
 import Message from "./components/Message";
 
-const { VITE_APP_VAPID_KEY } = import.meta.env;
-
 function App() {
   const [count, setCount] = useState(0);
+
+  const { VITE_APP_VAPID_KEY } = import.meta.env;
 
   async function requestPermission() {
     //requesting permission using Notification API
