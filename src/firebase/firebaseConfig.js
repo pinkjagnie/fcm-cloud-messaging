@@ -2,6 +2,9 @@ import { initializeApp } from "firebase/app";
 
 import { getMessaging, getToken } from "firebase/messaging";
 
+import { getFirestore } from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
+
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_APP_API_KEY,
   authDomain: import.meta.env.VITE_APP_AUTH_DOMAIN,
@@ -19,6 +22,9 @@ const app = initializeApp(firebaseConfig);
 // Messaging service
 export const messaging = getMessaging(app);
 
+// Firestore configure
+const firestore = getFirestore(app);
+
 export const requestForToken = () => {
   // The method getToken() allows FCM to use the VAPID key credential
   // when sending message requests to different push services
@@ -35,6 +41,17 @@ export const requestForToken = () => {
           }
         } else {
           localStorage.setItem("fcmToken", currentToken);
+        }
+
+        // adding token to database in firestore
+        try {
+          const docRef = addDoc(collection(firestore, "tokens"), {
+            token: currentToken,
+            createdAt: new Date(),
+          });
+          console.log("Token stored with ID:", docRef.id);
+        } catch (e) {
+          console.error("Error storing token:", e);
         }
       } else {
         console.log(
