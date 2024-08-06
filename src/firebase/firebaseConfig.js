@@ -2,8 +2,14 @@ import { initializeApp } from "firebase/app";
 
 import { getMessaging, getToken } from "firebase/messaging";
 
-import { getFirestore } from "firebase/firestore";
-import { collection, addDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+  addDoc,
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_APP_API_KEY,
@@ -35,23 +41,42 @@ export const requestForToken = () => {
 
         const storedToken = localStorage.getItem("fcmToken");
 
-        if (storedToken) {
-          if (currentToken !== storedToken) {
-            localStorage.setItem("fcmToken", currentToken);
-          }
-        } else {
+        if (!storedToken || currentToken !== storedToken) {
           localStorage.setItem("fcmToken", currentToken);
         }
 
+        // if (storedToken) {
+        //   if (currentToken !== storedToken) {
+        //     localStorage.setItem("fcmToken", currentToken);
+        //   }
+        // } else {
+        //   localStorage.setItem("fcmToken", currentToken);
+        // }
+
         // adding token to database in firestore
-        try {
-          const docRef = addDoc(collection(firestore, "tokens"), {
+        // try {
+        //   const docRef = addDoc(collection(firestore, "tokens"), {
+        //     token: currentToken,
+        //     createdAt: new Date(),
+        //   });
+        //   console.log("Token stored with ID:", docRef.id);
+        // } catch (e) {
+        //   console.error("Error storing token:", e);
+        // }
+
+        // checking if token already exist in database & then adding token to database - Firestore
+        const tokensRef = collection(firestore, "tokens");
+        const q = query(tokensRef, where("token", "==", currentToken));
+        const querySnapshot = getDocs(q);
+
+        if (querySnapshot.empty) {
+          const docRef = addDoc(tokensRef, {
             token: currentToken,
             createdAt: new Date(),
           });
           console.log("Token stored with ID:", docRef.id);
-        } catch (e) {
-          console.error("Error storing token:", e);
+        } else {
+          console.log("Token already exists in Firestore.");
         }
       } else {
         console.log(
